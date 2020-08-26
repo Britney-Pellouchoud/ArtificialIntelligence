@@ -1,0 +1,39 @@
+<<<<<<< HEAD
+1.mv <originallocation> <newlocation>
+2.chmod a+rwx <filename>
+3.pwd
+4.ping
+5.find <filename>
+6.ps 
+7.kill <filename>
+8.diff <file1> <file2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
+1.find
+2.ps
+3.kill
+4.diff
+>>>>>>> e88e74d6e8d04c8af18b84e6b97006f2713b11ad
