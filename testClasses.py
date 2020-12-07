@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -17,29 +17,6 @@ import inspect
 import re
 import sys
 
-# BEGIN SOLUTION NO PROMPT
-def invertLayout(layout_text):
-    # Keep lower left fix as this is hardcoded in PositionSearchProblem (gah)
-    # as the goal.
-    lines = [l.strip() for l in layout_text.split('\n')]
-    h = len(lines)
-    w = len(lines[0])
-    tiles = {}
-    for y, line in enumerate(lines):
-        for x, tile in enumerate(line):
-            # (x,y)
-            # (0,0) -> (h,w)
-            # (0,h) -> (0,w)
-            tiles[h-1-y, w-1-x] = tile
-
-    new_lines = []
-    for y in range(w):
-        new_lines.append("")
-        for x in range(h):
-            new_lines[-1] += tiles[x,y]
-    #return layout_text
-    return "\n".join(new_lines)
-# END SOLUTION NO PROMPT
 
 # Class which models a question in a project.  Note that questions have a
 # maximum number of points they are worth, and are composed of a series of
@@ -84,6 +61,7 @@ class PassAllTestsQuestion(Question):
         else:
             grades.assignFullCredit()
 
+
 class ExtraCreditPassAllTestsQuestion(Question):
     def __init__(self, questionDict, display):
         Question.__init__(self, questionDict, display)
@@ -115,11 +93,12 @@ class HackedPartialCreditQuestion(Question):
         for testCase, f in self.testCases:
             testResult = f(grades)
             if "points" in testCase.testDict:
-                if testResult: points += float(testCase.testDict["points"])
+                if testResult:
+                    points += float(testCase.testDict["points"])
             else:
                 passed = passed and testResult
 
-        ## FIXME: Below terrible hack to match q3's logic
+        # FIXME: Below terrible hack to match q3's logic
         if int(points) == self.maxPoints and not passed:
             grades.assignZeroCredit()
         else:
@@ -139,6 +118,7 @@ class Q6PartialCreditQuestion(Question):
         if False in results:
             grades.assignZeroCredit()
 
+
 class PartialCreditQuestion(Question):
     """Fails any test which returns False, otherwise doesn't effect the grades object.
     Partial credit tests will add the required points."""
@@ -153,19 +133,12 @@ class PartialCreditQuestion(Question):
                 return False
 
 
-
 class NumberPassedQuestion(Question):
     """Grade is the number of test cases passed."""
 
     def execute(self, grades):
         grades.addPoints([f(grades) for _, f in self.testCases].count(True))
 
-
-
-
-# BEGIN SOLUTION NO PROMPT
-from testParser import emitTestDict
-# END SOLUTION NO PROMPT
 
 # Template modeling a generic test case
 class TestCase(object):
@@ -212,13 +185,13 @@ class TestCase(object):
         return False
 
     # This should really be question level?
-    #
     def testPartial(self, grades, points, maxPoints):
         grades.addPoints(points)
         extraCredit = max(0, points - maxPoints)
         regularCredit = points - extraCredit
 
-        grades.addMessage('%s: %s (%s of %s points)' % ("PASS" if points >= maxPoints else "FAIL", self.path, regularCredit, maxPoints))
+        grades.addMessage('%s: %s (%s of %s points)' % (
+            "PASS" if points >= maxPoints else "FAIL", self.path, regularCredit, maxPoints))
         if extraCredit > 0:
             grades.addMessage('EXTRA CREDIT: %s points' % (extraCredit,))
 
@@ -229,12 +202,3 @@ class TestCase(object):
 
     def addMessage(self, message):
         self.messages.extend(message.split('\n'))
-
-    # BEGIN SOLUTION NO PROMPT
-    def createPublicVersion(self):
-        self.raiseNotDefined()
-
-    def emitPublicVersion(self, filePath):
-        with open(filePath, 'w') as handle:
-            emitTestDict(self.testDict, handle)
-    # END SOLUTION NO PROMPT
